@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import api from '@/services/api'
 
 export const useDiscussionStore = defineStore('discussions', {
   state: () => ({
@@ -97,4 +96,4 @@ export const useDiscussionStore = defineStore('discussions', {
       }
     }
   }
-}) 
+})

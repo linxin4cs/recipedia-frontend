@@ -1,60 +1,45 @@
 <template>
   <div class="container signup-container">
-    <div v-if="authStore.error" class="error-message">
-      {{ authStore.error }}
+    <div v-if="error" class="error-message">
+      {{ error }}
     </div>
 
     <div class="form-group">
       <label for="username">Username:</label>
-      <input 
-        type="text" 
-        id="username" 
-        v-model="signupData.username" 
+      <input
+        type="text"
+        id="username"
+        v-model="signupData.username"
         placeholder="Choose a username"
-        :disabled="authStore.loading"
-      >
-    </div>
-
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input 
-        type="email" 
-        id="email" 
-        v-model="signupData.email" 
-        placeholder="Enter your email"
-        :disabled="authStore.loading"
       >
     </div>
 
     <div class="form-group">
       <label for="password">Password:</label>
-      <input 
-        type="password" 
-        id="password" 
-        v-model="signupData.password" 
+      <input
+        type="password"
+        id="password"
+        v-model="signupData.password"
         placeholder="Create a password"
-        :disabled="authStore.loading"
       >
     </div>
 
     <div class="form-group">
       <label for="confirmPassword">Confirm Password:</label>
-      <input 
-        type="password" 
-        id="confirmPassword" 
-        v-model="signupData.confirmPassword" 
+      <input
+        type="password"
+        id="confirmPassword"
+        v-model="signupData.confirmPassword"
         placeholder="Confirm your password"
-        :disabled="authStore.loading"
       >
     </div>
 
-    <base-button 
+    <base-button
       @click="handleSignup"
-      :disabled="authStore.loading || !isFormValid"
     >
-      {{ authStore.loading ? 'Creating Account...' : 'Sign Up' }}
+      Sign Up
     </base-button>
-    
+
     <p>Already have an account? <router-link to="/login">Log in here</router-link>.</p>
   </div>
 </template>
@@ -70,34 +55,36 @@ const authStore = useAuthStore()
 
 const signupData = ref({
   username: '',
-  email: '',
   password: '',
   confirmPassword: ''
 })
 
+const error = ref('')
+
 const isFormValid = computed(() => {
-  const { username, email, password, confirmPassword } = signupData.value
-  return username.trim() && 
-         email.trim() && 
-         password.length >= 6 && 
+  const { username, password, confirmPassword } = signupData.value
+  return username.trim() &&
+         password.trim() &&
          password === confirmPassword
 })
 
 const handleSignup = async () => {
   if (!isFormValid.value) {
-    authStore.error = 'Please check your input fields'
+    error.value = 'Please check your input fields'
     return
   }
+
+  error.value = ''
 
   try {
     await authStore.signup({
       username: signupData.value.username,
-      email: signupData.value.email,
       password: signupData.value.password
     })
-    router.push('/account')
-  } catch (error) {
-    console.error('Signup failed:', error)
+
+    await router.push('/')
+  } catch (err) {
+    error.value = err.response.statusText
   }
 }
 </script>

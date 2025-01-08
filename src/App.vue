@@ -19,6 +19,16 @@
 </template>
 
 <style>
+
+header {
+  background-color: var(--main-color);
+  color: var(--text-color);
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: calc(100vw - 100%);
+  text-align: center;
+}
+
 nav {
   background-color: var(--main-color);
   overflow: hidden;
@@ -41,13 +51,6 @@ nav a:hover {
 
 .account-link {
   float: right;
-}
-
-header {
-  background-color: var(--main-color);
-  color: var(--text-color);
-  padding: 15px;
-  text-align: center;
 }
 
 .footer {

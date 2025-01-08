@@ -1,46 +1,47 @@
 <template>
   <div class="container login-container">
-    <div v-if="authStore.error" class="error-message">
-      {{ authStore.error }}
+    <div v-if="error" class="error-message">
+      {{ error }}
     </div>
 
     <div class="form-group">
       <label for="username">Username:</label>
-      <input 
-        type="text" 
-        id="username" 
-        v-model="credentials.username" 
+      <input
+        type="text"
+        id="username"
+        v-model="credentials.username"
         placeholder="Enter Username"
-        :disabled="authStore.loading"
       >
     </div>
 
     <div class="form-group">
       <label for="password">Password:</label>
-      <input 
-        type="password" 
-        id="password" 
-        v-model="credentials.password" 
+      <input
+        type="password"
+        id="password"
+        v-model="credentials.password"
         placeholder="Enter Password"
-        :disabled="authStore.loading"
       >
     </div>
 
-    <base-button 
+    <base-button
       @click="handleLogin"
-      :disabled="authStore.loading || !isFormValid"
+      :disabled="!isFormValid"
     >
-      {{ authStore.loading ? 'Logging in...' : 'Login' }}
+      Login
     </base-button>
 
-    <p>Don't have an account? <router-link to="/signup">Sign up here</router-link>.</p>
+    <p>Don't have an account?
+      <router-link to="/signup">Sign up here</router-link>
+      .
+    </p>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
+import {ref, computed} from 'vue'
+import {useRouter} from 'vue-router'
+import {useAuthStore} from '@/stores/auth'
 import BaseButton from '@/components/BaseButton.vue'
 
 const router = useRouter()
@@ -51,18 +52,22 @@ const credentials = ref({
   password: ''
 })
 
+const error = ref('')
+
 const isFormValid = computed(() => {
   return credentials.value.username.trim() && credentials.value.password.trim()
 })
 
 const handleLogin = async () => {
   if (!isFormValid.value) return
-  
+
+  error.value = ''
+
   try {
     await authStore.login(credentials.value)
-    router.push('/account')
-  } catch (error) {
-    console.error('Login failed:', error)
+    await router.push('/')
+  } catch (err) {
+    error.value = err.response.statusText
   }
 }
 </script>

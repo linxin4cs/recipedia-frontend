@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import api from '@/services/api'
 
 export const useRecipeStore = defineStore('recipes', {
   state: () => ({
@@ -177,14 +176,14 @@ export const useRecipeStore = defineStore('recipes', {
           ...comment,
           date: new Date().toLocaleDateString()
         }
-        
+
         if (this.currentRecipe?.id === recipeId) {
           if (!this.currentRecipe.comments) {
             this.currentRecipe.comments = []
           }
           this.currentRecipe.comments.push(response)
         }
-        
+
         return response
       } catch (error) {
         this.error = error.message
@@ -200,7 +199,7 @@ export const useRecipeStore = defineStore('recipes', {
       try {
         // const response = await api.get('/recipes/search', { params: { q: query } })
         // 模拟搜索结果
-        const response = this.recipes.filter(recipe => 
+        const response = this.recipes.filter(recipe =>
           recipe.title.toLowerCase().includes(query.toLowerCase()) ||
           recipe.description.toLowerCase().includes(query.toLowerCase())
         )
