@@ -1,5 +1,4 @@
 <template>
-  <div id="app">
     <header>
       <h1>Recipedia</h1>
     </header>
@@ -11,18 +10,15 @@
       <router-link to="/create" :class="{ selectedNav: $route.path === '/create' }">Create Recipe</router-link>
       <router-link to="/account" class="account-link" :class="{ selectedNav: $route.path === '/account' }">Account</router-link>
     </nav>
-    
+
     <router-view></router-view>
-    
+
     <footer class="footer">
       <p>&copy; 2024 Recipedia</p>
     </footer>
-  </div>
 </template>
 
 <style>
-@import './styles/main.css';
-
 nav {
   background-color: var(--main-color);
   overflow: hidden;
