@@ -1,85 +1,64 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <div id="app">
+    <header>
+      <h1>Recipedia</h1>
+    </header>
+    <nav>
+      <router-link to="/" :class="{ selectedNav: $route.path === '/' }">Home</router-link>
+      <router-link to="/trendy" :class="{ selectedNav: $route.path === '/trendy' }">Trendy Recipes</router-link>
+      <router-link to="/challenge" :class="{ selectedNav: $route.path === '/challenge' }">Challenges</router-link>
+      <router-link to="/discussion" :class="{ selectedNav: $route.path === '/discussion' }">Discussion</router-link>
+      <router-link to="/create" :class="{ selectedNav: $route.path === '/create' }">Create Recipe</router-link>
+      <router-link to="/account" class="account-link" :class="{ selectedNav: $route.path === '/account' }">Account</router-link>
+    </nav>
+    
+    <router-view></router-view>
+    
+    <footer class="footer">
+      <p>&copy; 2024 Recipedia</p>
+    </footer>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+<style>
+@import './styles/main.css';
 
 nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+  background-color: var(--main-color);
+  overflow: hidden;
 }
 
 nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+  float: left;
+  color: var(--text-color);
+  padding: 14px 16px;
+  text-decoration: none;
 }
 
-nav a:first-of-type {
-  border: 0;
+nav a:hover {
+  background-color: var(--hover-color);
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.selectedNav {
+  background-color: var(--hover-color);
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.account-link {
+  float: right;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+header {
+  background-color: var(--main-color);
+  color: var(--text-color);
+  padding: 15px;
+  text-align: center;
+}
 
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.footer {
+  margin-top: auto;
+  background-color: var(--main-color);
+  color: var(--text-color);
+  text-align: center;
+  padding: 10px;
 }
 </style>
