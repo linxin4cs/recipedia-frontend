@@ -11,6 +11,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@volar/language-server": "2.4.11",
+    "@vue/language-server": "2.2.0",
     "axios": "^1.7.9",
     "pinia": "^2.3.0",
     "recipedia-frontend": "file:",

@@ -10,8 +10,7 @@
 
     <template v-else>
       <h2>{{ recipeStore.currentRecipe.title }}</h2>
-      <rating-stars :value="recipeStore.currentRecipe.rating" />
-      
+
       <p><strong>Description:</strong> {{ recipeStore.currentRecipe.description }}</p>
 
       <h3>Ingredients</h3>
@@ -29,14 +28,14 @@
       </ol>
 
       <div class="recipe-actions">
-        <base-button 
+        <base-button
           v-if="isOwner"
           @click="handleEdit"
         >
           Edit Recipe
         </base-button>
-        <base-button 
-          type="secondary" 
+        <base-button
+          type="secondary"
           @click="handleSave"
           :disabled="recipeStore.loading"
         >
@@ -46,9 +45,9 @@
 
       <div class="comments-section">
         <h3>Comments</h3>
-        <recipe-comments 
-          :comments="recipeStore.currentRecipe.comments" 
-          @add-comment="addComment" 
+        <recipe-comments
+          :comments="recipeStore.currentRecipe.comments"
+          @add-comment="addComment"
         />
       </div>
     </template>
@@ -60,7 +59,6 @@ import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useRecipeStore } from '@/stores/recipes'
 import { useAuthStore } from '@/stores/auth'
-import RatingStars from '@/components/RatingStars.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import RecipeComments from '@/components/RecipeComments.vue'
 

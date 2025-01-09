@@ -6,7 +6,7 @@
       <div class="challenge-timer" v-if="currentChallenge.endDate">
         <p>Time Remaining: {{ timeRemaining }}</p>
       </div>
-      
+
       <div class="challenge-actions">
         <base-button @click="participateInChallenge">
           Participate
@@ -16,7 +16,7 @@
 
     <div class="winners-section">
       <h3>Winners</h3>
-      <div class="recipe-grid">
+      <div class="item-grid">
         <recipe-card
           v-for="recipe in currentChallenge.winners"
           :key="recipe.id"
@@ -28,14 +28,14 @@
     <div class="previous-challenges">
       <h3>Previous Challenges</h3>
       <div class="challenge-list">
-        <div 
-          v-for="challenge in previousChallenges" 
+        <div
+          v-for="challenge in previousChallenges"
           :key="challenge.id"
           class="challenge-card"
         >
           <h4>{{ challenge.title }}</h4>
           <p>{{ challenge.description }}</p>
-          <base-button 
+          <base-button
             type="secondary"
             @click="viewChallenge(challenge.id)"
           >
@@ -93,9 +93,9 @@ const timeRemaining = computed(() => {
   const now = new Date()
   const end = new Date(currentChallenge.value.endDate)
   const diff = end - now
-  
+
   if (diff <= 0) return 'Challenge ended'
-  
+
   const days = Math.floor(diff / (1000 * 60 * 60 * 24))
   return `${days} days remaining`
 })
@@ -127,7 +127,7 @@ const viewChallenge = (challengeId) => {
   margin-top: 20px;
 }
 
-.recipe-grid {
+.item-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;

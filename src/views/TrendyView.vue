@@ -1,16 +1,16 @@
 <template>
   <div class="container">
     <h2>Trendy Recipes</h2>
-    
+
     <div v-if="recipeStore.loading" class="loading">
       Loading...
     </div>
-    
+
     <div v-else-if="recipeStore.error" class="error">
       {{ recipeStore.error }}
     </div>
-    
-    <div v-else class="recipe-grid">
+
+    <div v-else class="item-grid">
       <recipe-card
         v-for="recipe in recipeStore.trendyRecipes"
         :key="recipe.id"
@@ -33,7 +33,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.recipe-grid {
+.item-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;

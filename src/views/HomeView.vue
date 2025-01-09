@@ -12,7 +12,7 @@
 
     <div class="featured-recipes" v-if="featuredRecipes.length">
       <h3>Featured Recipes</h3>
-      <div class="recipe-grid">
+      <div class="item-grid">
         <recipe-card
           v-for="recipe in featuredRecipes"
           :key="recipe.id"
@@ -50,7 +50,7 @@ const handleSearch = () => {
 </script>
 
 <style scoped>
-.recipe-grid {
+.item-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;

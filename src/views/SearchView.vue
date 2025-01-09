@@ -27,14 +27,14 @@
     </div>
 
     <div v-else>
-      <div v-if="searchResults.length" class="recipe-grid">
+      <div v-if="searchResults.length" class="item-grid">
         <recipe-card
           v-for="recipe in searchResults"
           :key="recipe.id"
           :recipe="recipe"
         />
       </div>
-      
+
       <div v-else class="no-results">
         <p>No recipes found for "{{ searchQuery }}"</p>
         <base-button @click="$router.push('/create')">
@@ -61,7 +61,7 @@ const sortBy = ref('relevance')
 
 const searchResults = computed(() => {
   let results = [...recipeStore.searchResults]
-  
+
   switch (sortBy.value) {
     case 'rating':
       return results.sort((a, b) => b.rating - a.rating)
@@ -107,7 +107,7 @@ const handleSearch = async () => {
   border-radius: 4px;
 }
 
-.recipe-grid {
+.item-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
@@ -139,4 +139,4 @@ const handleSearch = async () => {
   border-radius: 4px;
   margin-bottom: 20px;
 }
-</style> 
+</style>

@@ -17,7 +17,7 @@ const props = defineProps({
   type: {
     type: String,
     default: 'primary',
-    validator: value => ['primary', 'secondary'].includes(value)
+    validator: value => ['primary', 'secondary', 'danger'].includes(value)
   },
   disabled: {
     type: Boolean,
@@ -65,5 +65,10 @@ const handleClick = (event) => {
 .disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.type-danger {
+  background-color: #f44336;
+  color: white;
 }
 </style>

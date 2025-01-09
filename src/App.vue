@@ -3,12 +3,12 @@
       <h1>Recipedia</h1>
     </header>
     <nav>
-      <router-link to="/" :class="{ selectedNav: $route.path === '/' }">Home</router-link>
-      <router-link to="/trendy" :class="{ selectedNav: $route.path === '/trendy' }">Trendy Recipes</router-link>
-      <router-link to="/challenge" :class="{ selectedNav: $route.path === '/challenge' }">Challenges</router-link>
-      <router-link to="/discussion" :class="{ selectedNav: $route.path === '/discussion' }">Discussion</router-link>
-      <router-link to="/create" :class="{ selectedNav: $route.path === '/create' }">Create Recipe</router-link>
-      <router-link to="/account" class="account-link" :class="{ selectedNav: $route.path === '/account' }">Account</router-link>
+      <router-link to="/" :class="{ selectedNav: currentRoute.path === '/' }">Home</router-link>
+      <router-link to="/trendy" :class="{ selectedNav: currentRoute.path === '/trendy' }">Trendy Recipes</router-link>
+      <router-link to="/challenge" :class="{ selectedNav: currentRoute.path === '/challenge' }">Challenges</router-link>
+      <router-link to="/discussion" :class="{ selectedNav: currentRoute.path === '/discussion' }">Discussion</router-link>
+      <router-link to="/create" :class="{ selectedNav: currentRoute.path === '/create' }">Create Recipe</router-link>
+      <router-link to="/account" class="account-link" :class="{ selectedNav: currentRoute.path === '/account' }">Account</router-link>
     </nav>
 
     <router-view></router-view>
@@ -17,6 +17,15 @@
       <p>&copy; 2024 Recipedia</p>
     </footer>
 </template>
+
+<script setup>
+
+import {useRouter} from "vue-router";
+
+const router = useRouter()
+const currentRoute = router.currentRoute
+
+</script>
 
 <style>
 

@@ -5,51 +5,43 @@
     <div v-if="recipeStore.error" class="error-message">
       {{ recipeStore.error }}
     </div>
-    
+
     <div class="recipe-form">
       <div class="form-group">
         <label for="recipe-title">Recipe Title:</label>
-        <input 
-          type="text" 
-          id="recipe-title" 
+        <input
+          type="text"
+          id="recipe-title"
           v-model="recipeData.title"
-          placeholder="Enter recipe title" 
+          placeholder="Enter recipe title"
           :disabled="recipeStore.loading"
         >
       </div>
 
       <div class="form-group">
         <label for="description">Description:</label>
-        <textarea 
-          id="description" 
+        <textarea
+          id="description"
           v-model="recipeData.description"
-          placeholder="Enter a brief description" 
+          placeholder="Enter a brief description"
           :disabled="recipeStore.loading"
         ></textarea>
       </div>
 
       <div class="form-group">
-        <label>Rating:</label>
-        <rating-stars 
-          v-model:value="recipeData.rating"
-          :interactive="true"
-        />
-      </div>
-
-      <div class="form-group">
         <label>Ingredients:</label>
-        <div 
-          v-for="(ingredient, index) in recipeData.ingredients" 
+        <div
+          v-for="(ingredient, index) in recipeData.ingredients"
           :key="index"
           class="ingredient-input"
         >
-          <input 
-            type="text" 
+          <input
+            type="text"
             v-model="recipeData.ingredients[index]"
             placeholder="Enter ingredient"
             :disabled="recipeStore.loading"
           >
-          <base-button 
+          <base-button
             type="secondary"
             @click="removeIngredient(index)"
             :disabled="recipeStore.loading"
@@ -57,7 +49,7 @@
             Remove
           </base-button>
         </div>
-        <base-button 
+        <base-button
           type="secondary"
           @click="addIngredient"
           :disabled="recipeStore.loading"
@@ -68,17 +60,17 @@
 
       <div class="form-group">
         <label>Instructions:</label>
-        <div 
-          v-for="(step, index) in recipeData.instructions" 
+        <div
+          v-for="(step, index) in recipeData.instructions"
           :key="index"
           class="instruction-input"
         >
-          <textarea 
+          <textarea
             v-model="recipeData.instructions[index]"
             :placeholder="`Step ${index + 1}`"
             :disabled="recipeStore.loading"
           ></textarea>
-          <base-button 
+          <base-button
             type="secondary"
             @click="removeInstruction(index)"
             :disabled="recipeStore.loading"
@@ -86,7 +78,7 @@
             Remove
           </base-button>
         </div>
-        <base-button 
+        <base-button
           type="secondary"
           @click="addInstruction"
           :disabled="recipeStore.loading"
@@ -96,14 +88,14 @@
       </div>
 
       <div class="form-actions">
-        <base-button 
-          type="secondary" 
+        <base-button
+          type="secondary"
           @click="$router.go(-1)"
           :disabled="recipeStore.loading"
         >
           Cancel
         </base-button>
-        <base-button 
+        <base-button
           @click="handleSubmit"
           :disabled="recipeStore.loading || !isFormValid"
         >
@@ -120,7 +112,6 @@ import { useRouter } from 'vue-router'
 import { useRecipeStore } from '@/stores/recipes'
 import { useAuthStore } from '@/stores/auth'
 import BaseButton from '@/components/BaseButton.vue'
-import RatingStars from '@/components/RatingStars.vue'
 
 const router = useRouter()
 const recipeStore = useRecipeStore()
@@ -163,8 +154,8 @@ const handleSubmit = async () => {
 }
 
 const isFormValid = computed(() => {
-  return recipeData.value.title.trim() && 
-         recipeData.value.description.trim() && 
+  return recipeData.value.title.trim() &&
+         recipeData.value.description.trim() &&
          recipeData.value.ingredients.some(i => i.trim()) &&
          recipeData.value.instructions.some(i => i.trim())
 })
