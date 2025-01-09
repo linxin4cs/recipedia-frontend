@@ -68,7 +68,7 @@
     <section>
       <h3>My Challenges</h3>
       <div class="item-grid">
-        <recipe-card v-for="challenge in challenges" :key="challenge.challengeId" :recipe="challenge" />
+        <challenge-card v-for="challenge in challenges" :key="challenge.challengeId" :challenge="challenge" />
       </div>
 
       <div v-if="challenges.length === 0" class="no-items">
@@ -82,7 +82,7 @@
     <section>
       <h3>My Discussions</h3>
       <div class="item-grid">
-        <recipe-card v-for="discussion in discussions" :key="discussion.discussionId" :recipe="discussion" />
+        <discussion-card v-for="discussion in discussions" :key="discussion.discussionId" :discussion="discussion" />
       </div>
 
       <div v-if="discussions.length === 0" class="no-items">
@@ -98,11 +98,12 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useAuthStore } from '@/stores/auth'
-import { useRecipeStore } from '@/stores/recipes'
 import BaseButton from '@/components/BaseButton.vue'
 import RecipeCard from '@/components/RecipeCard.vue'
 import { useRouter } from 'vue-router'
 import {jsonApi} from "@/services/api.js";
+import ChallengeCard from "@/components/ChallengeCard.vue";
+import DiscussionCard from "@/components/DiscussionCard.vue";
 
 onMounted(async () => {
   try {
