@@ -1,25 +1,25 @@
 <template>
   <form @submit.prevent="handleSubmit" class="change-password-form">
     <div class="form-group">
-      <input 
+      <input
         type="password"
         v-model="passwordData.currentPassword"
         placeholder="Current Password"
         required
       />
     </div>
-    
+
     <div class="form-group">
-      <input 
+      <input
         type="password"
         v-model="passwordData.newPassword"
         placeholder="New Password"
         required
       />
     </div>
-    
+
     <div class="form-group">
-      <input 
+      <input
         type="password"
         v-model="passwordData.confirmPassword"
         placeholder="Confirm Password"
@@ -28,14 +28,14 @@
     </div>
 
     <div class="form-actions">
-      <base-button 
-        type="secondary" 
+      <base-button
+        type="secondary"
         class="cancel-btn"
         @click="$emit('cancel')"
       >
         Cancel
       </base-button>
-      <base-button 
+      <base-button
         type="primary"
         :disabled="!isPasswordDataValid"
       >
@@ -47,7 +47,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import BaseButton from '@/components/BaseButton.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
 
 const emit = defineEmits(['submit', 'cancel'])
 
@@ -68,7 +68,7 @@ const isPasswordDataValid = computed(() => {
 
 const handleSubmit = () => {
   if (!isPasswordDataValid.value) return
-  
+
   emit('submit', {
     oldPassword: passwordData.value.currentPassword,
     newPassword: passwordData.value.newPassword

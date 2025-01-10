@@ -33,7 +33,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { jsonApi } from '@/services/api.js'
-import BaseButton from '@/components/BaseButton.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
 import {useAuthStore} from "@/stores/auth.js";
 
 const authStore = useAuthStore()

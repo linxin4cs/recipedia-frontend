@@ -27,7 +27,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import BaseButton from '@/components/BaseButton.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
 
 const emit = defineEmits(['submit', 'cancel'])
 
@@ -42,7 +42,7 @@ const isFormValid = computed(() => {
 
 const handleSubmit = () => {
   if (!isFormValid.value) return
-  
+
   emit('submit', { ...formData.value })
   formData.value = { title: '', description: '' }
 }

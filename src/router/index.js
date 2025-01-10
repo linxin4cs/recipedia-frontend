@@ -3,11 +3,11 @@ import { setupRouteGuards } from './guards'
 import HomeView from '../views/home/HomeView.vue'
 import LoginView from '../views/auth/LoginView.vue'
 import SignupView from '../views/auth/SignupView.vue'
-import AccountView from '../views/AccountView.vue'
-import CreateRecipeView from '../views/CreateRecipeView.vue'
+import AccountView from '../views/auth/AccountView.vue'
+import CreateRecipeView from '../views/recipe/CreateRecipeView.vue'
 import TrendyView from '../views/TrendyView.vue'
 import DiscussionView from '../views/discussion/DiscussionsView.vue'
-import RecipeView from '../views/RecipeView.vue'
+import RecipeView from '../views/recipe/RecipeDetailsView.vue'
 import SearchView from '../views/home/SearchView.vue'
 import ChallengeView from '../views/challenge/ChallengesView.vue'
 import ChallengeDetailsView from '../views/challenge/ChallengeDetailsView.vue'
@@ -38,7 +38,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
-      path: '/recipes/create',
+      path: '/create',
       name: 'create',
       component: CreateRecipeView,
       meta: { requiresAuth: true },

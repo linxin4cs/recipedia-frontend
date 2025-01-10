@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import RecipeCard from '@/components/RecipeCard.vue'
+import RecipeCard from '@/components/recipe/RecipeCard.vue'
 import {onMounted, ref} from "vue";
 
 

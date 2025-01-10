@@ -70,8 +70,8 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { jsonApi } from '@/services/api'
-import BaseButton from '@/components/BaseButton.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -112,6 +112,11 @@ const fetchDiscussionAndReplies = async () => {
 }
 
 const handleCreateReply = async () => {
+  if (!authStore.isAuthenticated) {
+    await router.push('/login')
+    return
+  }
+
   if (!newReply.value.trim()) return
 
   try {

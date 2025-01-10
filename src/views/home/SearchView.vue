@@ -44,8 +44,8 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { jsonApi } from '@/services/api'
-import SearchField from '@/components/SearchField.vue'
-import RecipeCard from '@/components/RecipeCard.vue'
+import SearchField from '@/components/common/SearchField.vue'
+import RecipeCard from '@/components/recipe/RecipeCard.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -83,7 +83,7 @@ const handleSearch = () => {
     q: searchQuery.value,
     ...(selectedCategory.value && { category: selectedCategory.value })
   }
-  
+
   router.push({ path: '/search', query })
   performSearch()
 }

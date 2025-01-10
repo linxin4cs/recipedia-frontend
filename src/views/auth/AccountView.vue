@@ -98,15 +98,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '@/stores/auth.js'
 import { useRouter } from 'vue-router'
 import { jsonApi } from '@/services/api.js'
-import BaseButton from '@/components/BaseButton.vue'
-import RecipeCard from '@/components/RecipeCard.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
+import RecipeCard from '@/components/recipe/RecipeCard.vue'
 import ChallengeCard from '@/components/challenge/ChallengeCard.vue'
 import DiscussionCard from '@/components/discussion/DiscussionCard.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import ModalDialog from '@/components/ModalDialog.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import ModalDialog from '@/components/common/ModalDialog.vue'
 import ChangePasswordForm from '@/components/account/ChangePasswordForm.vue'
 import EditProfileForm from '@/components/account/EditProfileForm.vue'
 

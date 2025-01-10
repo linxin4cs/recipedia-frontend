@@ -44,7 +44,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import BaseButton from '@/components/BaseButton.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
 
 const props = defineProps({
   initialData: {

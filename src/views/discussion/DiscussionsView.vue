@@ -42,10 +42,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { jsonApi } from '@/services/api'
-import BaseButton from '@/components/BaseButton.vue'
+import BaseButton from '@/components/common/BaseButton.vue'
 import DiscussionCard from '@/components/discussion/DiscussionCard.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
-import ModalDialog from '@/components/ModalDialog.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import ModalDialog from '@/components/common/ModalDialog.vue'
 import StartDiscussionForm from '@/components/discussion/StartDiscussionForm.vue'
 
 const authStore = useAuthStore()

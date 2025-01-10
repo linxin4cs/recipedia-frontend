@@ -21,8 +21,8 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SearchField from '@/components/SearchField.vue'
-import RecipeCard from '@/components/RecipeCard.vue'
+import SearchField from '@/components/common/SearchField.vue'
+import RecipeCard from '@/components/recipe/RecipeCard.vue'
 
 onMounted(() => {
   fetchLatestRecipes()
