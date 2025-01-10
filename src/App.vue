@@ -5,8 +5,8 @@
     <nav>
       <router-link to="/" :class="{ selectedNav: currentRoute.path === '/' }">Home</router-link>
       <router-link to="/trendy" :class="{ selectedNav: currentRoute.path === '/trendy' }">Trendy Recipes</router-link>
-      <router-link to="/challenge" :class="{ selectedNav: currentRoute.path === '/challenge' }">Challenges</router-link>
-      <router-link to="/discussion" :class="{ selectedNav: currentRoute.path === '/discussion' }">Discussion</router-link>
+      <router-link to="/challenges" :class="{ selectedNav: currentRoute.path === '/challenge' }">Challenges</router-link>
+      <router-link to="/discussions" :class="{ selectedNav: currentRoute.path === '/discussion' }">Discussion</router-link>
       <router-link to="/create" :class="{ selectedNav: currentRoute.path === '/create' }">Create Recipe</router-link>
       <router-link to="/account" class="account-link" :class="{ selectedNav: currentRoute.path === '/account' }">Account</router-link>
     </nav>

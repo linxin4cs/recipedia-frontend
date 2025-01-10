@@ -6,11 +6,12 @@ import SignupView from '../views/auth/SignupView.vue'
 import AccountView from '../views/AccountView.vue'
 import CreateRecipeView from '../views/CreateRecipeView.vue'
 import TrendyView from '../views/TrendyView.vue'
-import DiscussionView from '../views/DiscussionView.vue'
+import DiscussionView from '../views/discussion/DiscussionsView.vue'
 import RecipeView from '../views/RecipeView.vue'
 import SearchView from '../views/home/SearchView.vue'
 import ChallengeView from '../views/challenge/ChallengesView.vue'
 import ChallengeDetailsView from '../views/challenge/ChallengeDetailsView.vue'
+import DiscussionDetailView from '@/views/discussion/DiscussionDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,66 +19,66 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: HomeView,
     },
     {
       path: '/login',
       name: 'login',
-      component: LoginView
+      component: LoginView,
     },
     {
       path: '/signup',
       name: 'signup',
-      component: SignupView
+      component: SignupView,
     },
     {
       path: '/account',
       name: 'account',
       component: AccountView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/recipes/create',
       name: 'create',
       component: CreateRecipeView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
     },
     {
       path: '/trendy',
       name: 'trendy',
-      component: TrendyView
+      component: TrendyView,
     },
     {
-      path: '/challenge',
-      name: 'challenge',
-      component: ChallengeView
-    },
-    {
-      path: '/discussion',
-      name: 'discussion',
-      component: DiscussionView
-    },
-    {
-      path: '/recipes/:id',
-      name: 'recipe',
-      component: RecipeView
-    },
-    {
-      path: '/search',
-      name: 'search',
-      component: SearchView
+      path: '/challenges',
+      name: 'challenges',
+      component: ChallengeView,
     },
     {
       path: '/challenges/:id',
       name: 'challenge-details',
-      component: ChallengeDetailsView
+      component: ChallengeDetailsView,
     },
     {
-      path: '/:pathMatch(.*)*',
-      name: 'not-found',
-      component: () => import('../views/NotFoundView.vue')
-    }
-  ]
+      path: '/discussions',
+      name: 'discussions',
+      component: DiscussionView,
+    },
+    {
+      path: '/discussions/:id',
+      name: 'discussion-details',
+      component: DiscussionDetailView,
+    },
+    {
+      path: '/recipes/:id',
+      name: 'recipe',
+      component: RecipeView,
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: SearchView,
+    },
+  ],
 })
 
 setupRouteGuards(router)

@@ -22,53 +22,6 @@ export const useRecipeStore = defineStore('recipes', {
   },
 
   actions: {
-    async fetchRecipes() {
-      this.loading = true
-      try {
-        // const response = await api.get('/recipes')
-        // Simulated response
-        const response = [
-          {
-            id: 1,
-            title: 'Protein Pancakes',
-            rating: 4,
-            description: 'Healthy and delicious breakfast option'
-          },
-          {
-            id: 2,
-            title: 'Green Smoothie Bowl',
-            rating: 5,
-            description: 'Start your day with this nutritious bowl'
-          }
-        ]
-        this.recipes = response
-      } catch (error) {
-        this.error = error.message
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async fetchTrendyRecipes() {
-      this.loading = true
-      try {
-        // const response = await api.get('/recipes/trendy')
-        // Simulated response
-        const response = [
-          {
-            id: 3,
-            title: 'Trending Recipe 1',
-            rating: 5,
-            description: 'Currently trending recipe'
-          }
-        ]
-        this.trendyRecipes = response
-      } catch (error) {
-        this.error = error.message
-      } finally {
-        this.loading = false
-      }
-    },
 
     async createRecipe(recipeData) {
       this.loading = true
@@ -107,27 +60,6 @@ export const useRecipeStore = defineStore('recipes', {
       } catch (error) {
         this.error = error.message
         throw error
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async fetchUserRecipes() {
-      this.loading = true
-      try {
-        // const response = await api.get('/recipes/user')
-        // Simulated response
-        const response = [
-          {
-            id: 1,
-            title: 'My First Recipe',
-            rating: 4,
-            description: 'A personal creation'
-          }
-        ]
-        this.userRecipes = response
-      } catch (error) {
-        this.error = error.message
       } finally {
         this.loading = false
       }
@@ -187,34 +119,5 @@ export const useRecipeStore = defineStore('recipes', {
         this.loading = false
       }
     },
-
-    async searchRecipes(query) {
-      this.loading = true
-      this.searchResults = []
-      try {
-        const response = this.recipes.filter(recipe =>
-          recipe.title.toLowerCase().includes(query.toLowerCase()) ||
-          recipe.description.toLowerCase().includes(query.toLowerCase())
-        )
-        this.searchResults = response
-      } catch (error) {
-        this.error = error.message
-        throw error
-      } finally {
-        this.loading = false
-      }
-    },
-
-    async fetchPopularRecipes() {
-      this.loading = true
-      try {
-        const response = await jsonApi.get('/api/recipes/popular')
-        this.popularRecipes = response.data
-      } catch (error) {
-        this.error = error.message
-      } finally {
-        this.loading = false
-      }
-    }
   }
 })
