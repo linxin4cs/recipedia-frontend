@@ -22,7 +22,6 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import SearchField from '@/components/SearchField.vue'
-import BaseButton from '@/components/BaseButton.vue'
 import RecipeCard from '@/components/RecipeCard.vue'
 
 onMounted(() => {
