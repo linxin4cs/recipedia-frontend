@@ -1,85 +1,68 @@
 <template>
-  <div class="challenge-card" @click="() => router.push(`/challenges/${challenge.challengeId}`)">
+  <div class="challenge-card" @click="$emit('click')">
     <h3 class="challenge-title">{{ challenge.title }}</h3>
     <p class="challenge-description">{{ challenge.description }}</p>
     <div class="challenge-info">
-      <span class="challenge-dates">
-        {{ new Date(challenge.startDate).toLocaleDateString() }} -
-        {{ new Date(challenge.endDate).toLocaleDateString() }}
-      </span>
-      <span class="recipes-count">Recipes: {{ challenge.numberOfRecipes }}</span>
+      <div class="challenge-dates">
+        <span>{{ formatDate(challenge.startDate) }} - {{ formatDate(challenge.endDate) }}</span>
+      </div>
+      <span class="participants-count">{{ challenge.numberOfRecipes }} Recipes</span>
     </div>
   </div>
 </template>
 
 <script setup>
-import {useRouter} from "vue-router";
-
-const router = useRouter()
-
 defineProps({
   challenge: {
     type: Object,
-    required: true,
-    default: () => ({
-      challengeId: 0,
-      title: '',
-      description: '',
-      startDate: '',
-      endDate: '',
-      numberOfRecipes: 0
-    })
+    required: true
   }
 })
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString()
+}
 </script>
 
 <style scoped>
 .challenge-card {
-  background-color: #fff;
-  padding: 20px;
-  border: 1px solid #ddd;
+  background: white;
   border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: transform 0.2s;
 }
 
 .challenge-card:hover {
-  background-color: #f9f9f9;
+  transform: translateY(-2px);
 }
 
 .challenge-title {
-  font-size: 18px;
+  margin: 0 0 10px 0;
   color: #333;
-  margin: 0 0 12px 0;
 }
 
 .challenge-description {
-  color: #555;
+  color: #666;
   font-size: 14px;
-  line-height: 1.5;
-  margin: 0 0 12px 0;
+  margin: 0 0 15px 0;
+  line-height: 1.4;
 }
 
 .challenge-info {
-  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
-  padding-top: 12px;
-  border-top: 1px solid #eee;
+  font-size: 14px;
 }
 
 .challenge-dates {
-  color: #666;
-  font-size: 14px;
+  color: #888;
 }
 
-.recipes-count {
-  font-size: 14px;
-  color: #f57c00;
-  padding: 4px 8px;
-  border: 1px solid #f57c00;
-  border-radius: 4px;
+.participants-count {
+  color: var(--main-color);
+  font-weight: bold;
 }
 </style>

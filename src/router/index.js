@@ -6,10 +6,11 @@ import SignupView from '../views/SignupView.vue'
 import AccountView from '../views/AccountView.vue'
 import CreateRecipeView from '../views/CreateRecipeView.vue'
 import TrendyView from '../views/TrendyView.vue'
-import ChallengeView from '../views/ChallengeView.vue'
 import DiscussionView from '../views/DiscussionView.vue'
 import RecipeView from '../views/RecipeView.vue'
 import SearchView from '../views/SearchView.vue'
+import ChallengeView from '../views/ChallengeView.vue'
+import ChallengeDetailsView from '../views/ChallengeDetailsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +66,11 @@ const router = createRouter({
       path: '/search',
       name: 'search',
       component: SearchView
+    },
+    {
+      path: '/challenge/:id',
+      name: 'challenge-details',
+      component: ChallengeDetailsView
     },
     {
       path: '/:pathMatch(.*)*',

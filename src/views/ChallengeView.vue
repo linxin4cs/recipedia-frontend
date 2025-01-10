@@ -1,158 +1,96 @@
 <template>
-  <div class="container">
-    <div class="current-challenge">
-      <h2>{{ currentChallenge.title }}</h2>
-      <p><strong>Goals:</strong> {{ currentChallenge.goals }}</p>
-      <div class="challenge-timer" v-if="currentChallenge.endDate">
-        <p>Time Remaining: {{ timeRemaining }}</p>
-      </div>
-
-      <div class="challenge-actions">
-        <base-button @click="participateInChallenge">
-          Participate
-        </base-button>
-      </div>
+  <div class="challenges-container">
+    <h2>Cooking Challenges</h2>
+    
+    <div class="challenges-header">
+      <base-button 
+        v-if="isAuthenticated"
+        @click="showCreateModal = true"
+      >
+        Create Challenge
+      </base-button>
     </div>
 
-    <div class="winners-section">
-      <h3>Winners</h3>
-      <div class="item-grid">
-        <recipe-card
-          v-for="recipe in currentChallenge.winners"
-          :key="recipe.id"
-          :recipe="recipe"
-        />
-      </div>
+    <loading-spinner v-if="loading" />
+    
+    <div v-else class="challenges-grid">
+      <challenge-card
+        v-for="challenge in challenges"
+        :key="challenge.challengeId"
+        :challenge="challenge"
+        @click="viewChallenge(challenge.challengeId)"
+      />
     </div>
 
-    <div class="previous-challenges">
-      <h3>Previous Challenges</h3>
-      <div class="challenge-list">
-        <div
-          v-for="challenge in previousChallenges"
-          :key="challenge.id"
-          class="challenge-card"
-        >
-          <h4>{{ challenge.title }}</h4>
-          <p>{{ challenge.description }}</p>
-          <base-button
-            type="secondary"
-            @click="viewChallenge(challenge.id)"
-          >
-            View Results
-          </base-button>
-        </div>
-      </div>
-    </div>
+    <!-- Create Challenge Modal -->
+    <modal-dialog v-if="showCreateModal" @close="showCreateModal = false">
+      <template #header>Create New Challenge</template>
+      <template #default>
+        <create-challenge-form @submit="createChallenge" @cancel="showCreateModal = false" />
+      </template>
+    </modal-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { jsonApi } from '@/services/api'
+import ChallengeCard from '@/components/ChallengeCard.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import RecipeCard from '@/components/RecipeCard.vue'
+import ModalDialog from '@/components/ModalDialog.vue'
+import CreateChallengeForm from '@/components/CreateChallengeForm.vue'
 
 const router = useRouter()
+const authStore = useAuthStore()
+const { isAuthenticated } = authStore
 
-const currentChallenge = ref({
-  id: 1,
-  title: 'Bulk challenge',
-  goals: 'Create the best pelmeni\'s dish',
-  endDate: new Date('2024-12-31'),
-  winners: [
-    {
-      id: 1,
-      title: 'Pelmeni with mayo',
-      rating: 5,
-      description: 'Traditional pelmeni with a twist'
-    },
-    {
-      id: 2,
-      title: 'Pelmeni with smetana',
-      rating: 4,
-      description: 'Classic Russian style'
-    }
-  ]
-})
+const challenges = ref([])
+const loading = ref(true)
+const showCreateModal = ref(false)
 
-const previousChallenges = ref([
-  {
-    id: 1,
-    title: 'Healthy Desserts Week',
-    description: 'Create desserts under 200 calories'
-  },
-  {
-    id: 2,
-    title: 'Vegetarian Challenge',
-    description: 'Best meat-free recipes'
+onMounted(async () => {
+  try {
+    const response = await jsonApi.get('/api/challenges')
+    challenges.value = response.data
+  } catch (error) {
+    console.error('Failed to fetch challenges:', error)
+  } finally {
+    loading.value = false
   }
-])
-
-const timeRemaining = computed(() => {
-  const now = new Date()
-  const end = new Date(currentChallenge.value.endDate)
-  const diff = end - now
-
-  if (diff <= 0) return 'Challenge ended'
-
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  return `${days} days remaining`
 })
-
-const participateInChallenge = () => {
-  router.push('/create?challenge=' + currentChallenge.value.id)
-}
 
 const viewChallenge = (challengeId) => {
-  router.push('/challenge/' + challengeId)
+  router.push(`/challenges/${challengeId}`)
+}
+
+const createChallenge = async (challengeData) => {
+  try {
+    const response = await jsonApi.post('/api/challenges', challengeData)
+    challenges.value.push(response.data)
+    showCreateModal.value = false
+  } catch (error) {
+    console.error('Failed to create challenge:', error)
+  }
 }
 </script>
 
 <style scoped>
-.current-challenge {
-  background-color: var(--background-color);
+.challenges-container {
   padding: 20px;
-  border-radius: 8px;
-  margin-bottom: 30px;
 }
 
-.challenge-timer {
-  margin: 15px 0;
-  font-size: 1.2em;
-  color: var(--main-color);
+.challenges-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
 }
 
-.challenge-actions {
-  margin-top: 20px;
-}
-
-.item-grid {
+.challenges-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
-  margin: 20px 0;
-}
-
-.challenge-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.challenge-card {
-  background-color: var(--background-color);
-  padding: 15px;
-  border-radius: 8px;
-}
-
-.challenge-card h4 {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.challenge-card p {
-  margin-bottom: 15px;
 }
 </style>
