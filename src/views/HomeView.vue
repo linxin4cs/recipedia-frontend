@@ -1,50 +1,57 @@
 <template>
   <div class="container">
     <h2>Welcome to Recipedia</h2>
-    <search-field
-      v-model="searchQuery"
-      placeholder="Search recipes..."
-      @submit="handleSearch"
-    />
-    <base-button @click="$router.push('/create')">
-      Create New Recipe
-    </base-button>
+    <search-field v-model="searchQuery" placeholder="Search recipes..." @submit="handleSearch" />
 
-<!--    <div class="featured-recipes" v-if="featuredRecipes.length">-->
-<!--      <h3>Featured Recipes</h3>-->
-<!--      <div class="item-grid">-->
-<!--        <recipe-card-->
-<!--          v-for="recipe in featuredRecipes"-->
-<!--          :key="recipe.id"-->
-<!--          :recipe="recipe"-->
-<!--        />-->
-<!--      </div>-->
-<!--    </div>-->
+    <div v-if="isLoading" class="loading">Loading...</div>
+
+    <div v-else-if="error" class="error">
+      {{ error }}
+    </div>
+
+    <div class="latest-recipes" v-if="latestRecipes.length">
+      <h3>Latest Recipes</h3>
+      <div class="item-grid">
+        <recipe-card v-for="recipe in latestRecipes" :key="recipe.id" :recipe="recipe" />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import SearchField from '@/components/SearchField.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import RecipeCard from '@/components/RecipeCard.vue'
 
+onMounted(() => {
+  fetchLatestRecipes()
+})
+
+const isLoading = ref(true)
+const error = ref(null)
+
+const latestRecipes = ref([])
+
 const router = useRouter()
 const searchQuery = ref('')
-const featuredRecipes = ref([
-  {
-    id: 1,
-    title: 'Featured Recipe 1',
-    rating: 5,
-    description: 'A delicious featured recipe'
+
+const fetchLatestRecipes = async () => {
+  try {
+    const response = await fetch('/api/recipes/recent')
+    latestRecipes.value = await response.json()
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    isLoading.value = false
   }
-])
+}
 
 const handleSearch = () => {
   router.push({
     path: '/search',
-    query: { q: searchQuery.value }
+    query: { q: searchQuery.value },
   })
 }
 </script>
@@ -57,7 +64,7 @@ const handleSearch = () => {
   margin-top: 20px;
 }
 
-.featured-recipes {
+.latest-recipes {
   margin-top: 40px;
 }
 </style>

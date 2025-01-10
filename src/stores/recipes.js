@@ -8,7 +8,8 @@ export const useRecipeStore = defineStore('recipes', {
     currentRecipe: null,
     loading: false,
     error: null,
-    searchResults: []
+    searchResults: [],
+    popularRecipes: []
   }),
 
   getters: {
@@ -199,6 +200,18 @@ export const useRecipeStore = defineStore('recipes', {
       } catch (error) {
         this.error = error.message
         throw error
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async fetchPopularRecipes() {
+      this.loading = true
+      try {
+        const response = await jsonApi.get('/api/recipes/popular')
+        this.popularRecipes = response.data
+      } catch (error) {
+        this.error = error.message
       } finally {
         this.loading = false
       }

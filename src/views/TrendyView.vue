@@ -2,17 +2,17 @@
   <div class="container">
     <h2>Trendy Recipes</h2>
 
-    <div v-if="recipeStore.loading" class="loading">
+    <div v-if="isLoading" class="loading">
       Loading...
     </div>
 
-    <div v-else-if="recipeStore.error" class="error">
-      {{ recipeStore.error }}
+    <div v-else-if="error" class="error">
+      {{ error }}
     </div>
 
     <div v-else class="item-grid">
       <recipe-card
-        v-for="recipe in recipeStore.trendyRecipes"
+        v-for="recipe in recipes"
         :key="recipe.id"
         :recipe="recipe"
       />
@@ -21,15 +21,30 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
-import { useRecipeStore } from '@/stores/recipes'
 import RecipeCard from '@/components/RecipeCard.vue'
+import {onMounted, ref} from "vue";
 
-const recipeStore = useRecipeStore()
 
-onMounted(async () => {
-  await recipeStore.fetchTrendyRecipes()
+onMounted(() => {
+  fetchRecipes()
 })
+
+const recipes = ref([])
+const isLoading = ref(true)
+const error = ref(null)
+
+const fetchRecipes = async () => {
+  try {
+    const response = await fetch('/api/recipes/popular')
+    recipes.value = await response.json()
+  } catch (e) {
+    error.value = e.message
+  } finally {
+    isLoading.value = false
+  }
+}
+
+
 </script>
 
 <style scoped>
