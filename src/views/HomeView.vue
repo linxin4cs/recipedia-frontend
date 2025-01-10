@@ -10,16 +10,16 @@
       Create New Recipe
     </base-button>
 
-    <div class="featured-recipes" v-if="featuredRecipes.length">
-      <h3>Featured Recipes</h3>
-      <div class="item-grid">
-        <recipe-card
-          v-for="recipe in featuredRecipes"
-          :key="recipe.id"
-          :recipe="recipe"
-        />
-      </div>
-    </div>
+<!--    <div class="featured-recipes" v-if="featuredRecipes.length">-->
+<!--      <h3>Featured Recipes</h3>-->
+<!--      <div class="item-grid">-->
+<!--        <recipe-card-->
+<!--          v-for="recipe in featuredRecipes"-->
+<!--          :key="recipe.id"-->
+<!--          :recipe="recipe"-->
+<!--        />-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 

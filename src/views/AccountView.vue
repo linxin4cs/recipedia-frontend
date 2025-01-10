@@ -1,124 +1,116 @@
 <template>
   <div class="container">
-    <div class="profile-section-wrapper">
-      <section class="profile-section">
-        <template v-if="!isEditing">
-          <h2>
-            {{ user.username }}
-          </h2>
-          <p class="user-email">
-            {{ user.email }}
-          </p>
-          <p>
-            {{ user.bio }}
-          </p>
-        </template>
+    <loading-spinner v-if="isLoading" />
+    <template v-else-if="user.userId !== 0">
+      <div class="profile-section-wrapper">
+        <section class="profile-section">
+          <h2>{{ user.username }}</h2>
+          <p class="user-email">{{ user.email }}</p>
+          <p>{{ user.bio }}</p>
 
-        <div v-else class="profile-edit-section">
-          <input v-model="updatedUser.username" placeholder="Username" />
-          <input v-model="updatedUser.email" placeholder="Email" />
-          <textarea v-model="updatedUser.bio" placeholder="Bio"></textarea>
+          <div class="profile-actions">
+            <div class="profile-actions-edit">
+              <base-button @click="showEditModal = true">Edit Profile</base-button>
+            </div>
+            <div class="profile-actions-changePassword">
+              <base-button @click="showChangePasswordModal = true">
+                Change Password
+              </base-button>
+            </div>
+          </div>
+        </section>
+
+        <base-button type="danger" @click="handleDelete">Delete Account</base-button>
+        <base-button type="secondary" @click="handleLogout">Logout</base-button>
+      </div>
+
+      <section>
+        <h3>My Recipes</h3>
+        <div class="item-grid">
+          <recipe-card v-for="recipe in recipes" :key="recipe.recipeId" :recipe="recipe" />
         </div>
 
-        <div class="profile-actions">
-          <div class="profile-actions-edit">
-            <base-button @click="handleStartEdit" v-if="!isEditing">Edit Profile</base-button>
-            <template v-else>
-              <base-button @click="handleSaveProfile" :disabled="!isUpdatedUserValid"
-                >Save Changes</base-button
-              >
-              <base-button type="secondary" @click="handleCancelEdit">Cancel</base-button>
-            </template>
-          </div>
-          <div class="profile-actions-changePassword">
-            <BaseButton @click="isChangingPassword = true" v-if="!isChangingPassword"
-              >Change Password
-            </BaseButton>
-            <template v-else>
-              <div class="profile-actions-changePassword-inputs">
-                <input placeholder="Current Password" v-model="passwordData.currentPassword" />
-                <input placeholder="New Password" v-model="passwordData.newPassword" />
-                <input placeholder="Confirm Password" v-model="passwordData.confirmPassword" />
-              </div>
-              <BaseButton @click="handleChangePassword" :disabled="!isPasswordDataValid"
-                >Save Password
-              </BaseButton>
-              <BaseButton type="secondary" @click="handleCancelPasswordChange">Cancel</BaseButton>
-            </template>
-          </div>
+        <div v-if="recipes.length === 0" class="no-items">
+          <p>You haven't created any recipes yet.</p>
+          <base-button @click="router.push('/recipes/create')"
+            >Create Your First Recipe</base-button
+          >
         </div>
       </section>
 
-      <BaseButton type="danger" @click="handleDelete">Delete Account</BaseButton>
-      <BaseButton type="secondary" @click="handleLogout">Logout</BaseButton>
-    </div>
+      <section>
+        <h3>My Challenges</h3>
+        <div class="item-grid">
+          <challenge-card
+            v-for="challenge in challenges"
+            :key="challenge.challengeId"
+            :challenge="challenge"
+          />
+        </div>
 
-    <section>
-      <h3>My Recipes</h3>
-      <div class="item-grid">
-        <recipe-card v-for="recipe in recipes" :key="recipe.recipeId" :recipe="recipe" />
-      </div>
+        <div v-if="challenges.length === 0" class="no-items">
+          <p>You haven't joined any challenges yet.</p>
+          <base-button @click="router.push('/challenges')"
+            >Join your first challenge</base-button
+          >
+        </div>
+      </section>
 
-      <div v-if="recipes.length === 0" class="no-items">
-        <p>You haven't created any recipes yet.</p>
-        <base-button @click="router.push('/recipes/create')">Create Your First Recipe</base-button>
-      </div>
-    </section>
+      <section>
+        <h3>My Discussions</h3>
+        <div class="item-grid">
+          <discussion-card
+            v-for="discussion in discussions"
+            :key="discussion.discussionId"
+            :discussion="discussion"
+          />
+        </div>
 
-    <section>
-      <h3>My Challenges</h3>
-      <div class="item-grid">
-        <challenge-card v-for="challenge in challenges" :key="challenge.challengeId" :challenge="challenge" />
-      </div>
+        <div v-if="discussions.length === 0" class="no-items">
+          <p>You haven't created any discussions yet.</p>
+          <base-button @click="router.push('/discussions')"
+            >Create Your First discussion</base-button
+          >
+        </div>
+      </section>
+    </template>
 
-      <div v-if="challenges.length === 0" class="no-items">
-        <p>You haven't joined any challenges yet.</p>
-        <base-button @click="router.push('/challenges/create')"
-          >Join your first challenge</base-button
-        >
-      </div>
-    </section>
+    <div class="error-message" v-else>Failed to load user profile</div>
 
-    <section>
-      <h3>My Discussions</h3>
-      <div class="item-grid">
-        <discussion-card v-for="discussion in discussions" :key="discussion.discussionId" :discussion="discussion" />
-      </div>
+    <modal-dialog v-if="showChangePasswordModal" @close="showChangePasswordModal = false">
+      <template #header>Change Password</template>
+      <change-password-form
+        @submit="handleChangePassword"
+        @cancel="showChangePasswordModal = false"
+      />
+    </modal-dialog>
 
-      <div v-if="discussions.length === 0" class="no-items">
-        <p>You haven't created any discussions yet.</p>
-        <base-button @click="router.push('/discussions/create')"
-          >Create Your First discussion</base-button
-        >
-      </div>
-    </section>
+    <modal-dialog v-if="showEditModal" @close="showEditModal = false">
+      <template #header>Edit Profile</template>
+      <edit-profile-form
+        :initial-data="user"
+        @submit="handleSaveProfile"
+        @cancel="showEditModal = false"
+      />
+    </modal-dialog>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+import { jsonApi } from '@/services/api.js'
 import BaseButton from '@/components/BaseButton.vue'
 import RecipeCard from '@/components/RecipeCard.vue'
-import { useRouter } from 'vue-router'
-import {jsonApi} from "@/services/api.js";
-import ChallengeCard from "@/components/ChallengeCard.vue";
-import DiscussionCard from "@/components/DiscussionCard.vue";
-
-onMounted(async () => {
-  try {
-    await authStore.fetchUserProfile()
-
-    user.value = authStore.user
-    await Promise.all([fetchRecipes(), fetchChallenges(), fetchDiscussions()])
-
-  } catch (err) {
-    console.error(err)
-  }
-})
+import ChallengeCard from '@/components/challenge/ChallengeCard.vue'
+import DiscussionCard from '@/components/DiscussionCard.vue'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import ModalDialog from '@/components/ModalDialog.vue'
+import ChangePasswordForm from '@/components/account/ChangePasswordForm.vue'
+import EditProfileForm from '@/components/account/EditProfileForm.vue'
 
 const router = useRouter()
-
 const authStore = useAuthStore()
 
 const user = ref({
@@ -131,24 +123,24 @@ const user = ref({
 const recipes = ref([])
 const challenges = ref([])
 const discussions = ref([])
+const isLoading = ref(true)
+const showChangePasswordModal = ref(false)
+const showEditModal = ref(false)
 
-const updatedUser = ref({
-  username: '',
-  email: '',
-  bio: '',
+onMounted(async () => {
+  try {
+    await authStore.fetchUserProfile()
+    user.value = authStore.user
+    await Promise.all([fetchRecipes(), fetchChallenges(), fetchDiscussions()])
+  } catch (err) {
+    console.error(err)
+  } finally {
+    isLoading.value = false
+  }
 })
-
-const passwordData = ref({
-  currentPassword: '',
-  newPassword: '',
-  confirmPassword: '',
-})
-
-const isEditing = ref(false)
-const isChangingPassword = ref(false)
 
 const fetchRecipes = async () => {
- try {
+  try {
     const response = await jsonApi.get(`/api/users/${user.value.userId}/recipes`)
     recipes.value = response.data
   } catch (err) {
@@ -174,98 +166,38 @@ const fetchDiscussions = async () => {
   }
 }
 
-const isPasswordDataValid = computed(() => {
-  return (
-    passwordData.value.currentPassword.trim() &&
-    passwordData.value.newPassword.trim() &&
-    passwordData.value.confirmPassword.trim() &&
-    passwordData.value.newPassword === passwordData.value.confirmPassword
-  )
-})
-
-const isUpdatedUserValid = computed(() => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-  return updatedUser.value.username.trim() && emailRegex.test(updatedUser.value.email)
-})
-
-const handleStartEdit = () => {
-  isEditing.value = true
-
-  updatedUser.value.username = user.value.username
-  updatedUser.value.email = user.value.email
-  updatedUser.value.bio = user.value.bio
-}
-
-const handleSaveProfile = async () => {
-  isEditing.value = false
-
-  if (
-    updatedUser.value.username === user.value.username &&
-    updatedUser.value.email === user.value.email &&
-    updatedUser.value.bio === user.value.bio
-  ) {
-    return
-  }
-
+const handleSaveProfile = async (updatedData) => {
   try {
-    await authStore.updateUserProfile(updatedUser.value)
+    await authStore.updateUserProfile(updatedData)
     user.value = authStore.user
+    showEditModal.value = false
   } catch (err) {
     console.error(err)
   }
 }
 
-const handleCancelEdit = () => {
-  isEditing.value = false
-
-  updatedUser.value.username = user.value.username
-  updatedUser.value.email = user.value.email
-  updatedUser.value.bio = user.value.bio
+const handleChangePassword = async (passwordData) => {
+  try {
+    await authStore.changePassword(passwordData)
+    showChangePasswordModal.value = false
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 const handleLogout = () => {
   const confirmLogout = confirm('Are you sure you want to logout?')
-
-  if (!confirmLogout) {
-    return
-  }
+  if (!confirmLogout) return
 
   authStore.logout()
   router.push('/')
 }
 
 const handleDelete = () => {
-  if (!confirm('Are you sure you want to delete your account?')) {
-    return
-  }
+  if (!confirm('Are you sure you want to delete your account?')) return
 
   authStore.deleteAccount()
   router.push('/')
-}
-
-const handleChangePassword = async () => {
-  isChangingPassword.value = false
-
-  try {
-    await authStore.changePassword({
-      oldPassword: passwordData.value.currentPassword,
-      newPassword: passwordData.value.newPassword,
-    })
-    passwordData.value.currentPassword = ''
-    passwordData.value.newPassword = ''
-    passwordData.value.confirmPassword = ''
-  } catch (err) {
-    console.error(err)
-  }
-}
-
-const handleCancelPasswordChange = () => {
-  isChangingPassword.value = false
-
-  passwordData.value.currentPassword = ''
-  passwordData.value.newPassword = ''
-  passwordData.value.confirmPassword = ''
 }
 </script>
 
@@ -293,12 +225,6 @@ h2 {
 .user-email {
   color: #666;
   font-size: 0.9em;
-}
-
-.profile-edit-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
 .profile-actions {
@@ -337,16 +263,8 @@ h2 {
   gap: 10px;
 }
 
-.profile-actions-changePassword-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.profile-actions-changePassword input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.error-message {
+  color: red;
+  padding: 10px;
 }
 </style>

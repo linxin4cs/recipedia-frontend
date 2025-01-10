@@ -17,10 +17,23 @@
       <div class="challenge-actions">
         <base-button
           v-if="isAuthenticated && !hasJoined"
-          @click="showJoinModal = true"
+          @click="handleOpenJoinModal"
+          :disabled="isExpired"
         >
-          Join Challenge
+          {{ isExpired ? 'Challenge Expired' : 'Join Challenge' }}
         </base-button>
+      </div>
+
+      <div v-if="isExpired && winners.length" class="challenge-winners">
+        <h3>🏆 Challenge Winners</h3>
+        <div class="winners-grid">
+          <recipe-card
+            v-for="winner in winners"
+            :key="winner.recipeId"
+            :recipe="winner"
+            class="winner-card"
+          />
+        </div>
       </div>
 
       <div class="challenge-recipes">
@@ -54,15 +67,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import { jsonApi } from '@/services/api'
+import { useAuthStore } from '@/stores/auth.js'
+import { jsonApi } from '@/services/api.js'
 import LoadingSpinner from '@/components/LoadingSpinner.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import RecipeCard from '@/components/RecipeCard.vue'
 import ModalDialog from '@/components/ModalDialog.vue'
-import JoinChallengeForm from '@/components/JoinChallengeForm.vue'
+import JoinChallengeForm from '@/components/challenge/JoinChallengeForm.vue'
 
 const route = useRoute()
 const authStore = useAuthStore()
@@ -71,6 +84,7 @@ const { isAuthenticated } = authStore
 const challengeId = route.params.id
 const challenge = ref(null)
 const recipes = ref([])
+const winners = ref([])
 const loading = ref(true)
 const showJoinModal = ref(false)
 const hasJoined = ref(false)
@@ -84,6 +98,11 @@ onMounted(async () => {
 
     challenge.value = challengeResponse.data
     recipes.value = recipesResponse.data
+
+    if (isExpired.value) {
+      const winnersResponse = await jsonApi.get(`/api/challenges/${challengeId}/winners`)
+      winners.value = winnersResponse.data
+    }
   } catch (error) {
     console.error('Failed to fetch challenge details:', error)
   } finally {
@@ -106,6 +125,19 @@ const joinChallenge = async (recipeId) => {
   } catch (error) {
     console.error('Failed to join challenge:', error)
   }
+}
+
+const isExpired = computed(() => {
+  if (!challenge.value) return false
+  return new Date(challenge.value.endDate) < new Date()
+})
+
+const handleOpenJoinModal = () => {
+  if (!authStore.isAuthenticated) {
+    return router.push('/login')
+  }
+
+  showJoinModal.value = true
 }
 </script>
 
@@ -144,5 +176,26 @@ const joinChallenge = async (recipeId) => {
   text-align: center;
   color: #f44336;
   margin-top: 20px;
+}
+
+.challenge-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #ccc;
+}
+
+.challenge-winners {
+  margin: 20px 0;
+}
+
+.winners-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.winner-card {
+  border: 1px solid gold;
 }
 </style>

@@ -41,7 +41,7 @@
 <script setup>
 import {ref, computed} from 'vue'
 import {useRouter} from 'vue-router'
-import {useAuthStore} from '@/stores/auth'
+import {useAuthStore} from '@/stores/auth.js'
 import BaseButton from '@/components/BaseButton.vue'
 
 const router = useRouter()

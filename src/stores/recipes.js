@@ -135,8 +135,6 @@ export const useRecipeStore = defineStore('recipes', {
     async saveRecipe(recipeId) {
       this.loading = true
       try {
-        // const response = await api.post(`/recipes/${recipeId}/save`)
-        // 模拟响应
         const recipe = this.recipes.find(r => r.id === recipeId)
         if (recipe && !this.userRecipes.some(r => r.id === recipeId)) {
           this.userRecipes.push(recipe)
@@ -152,8 +150,6 @@ export const useRecipeStore = defineStore('recipes', {
     async removeFromSaved(recipeId) {
       this.loading = true
       try {
-        // await api.delete(`/recipes/${recipeId}/save`)
-        // 模拟响应
         const index = this.userRecipes.findIndex(r => r.id === recipeId)
         if (index > -1) {
           this.userRecipes.splice(index, 1)
@@ -169,8 +165,6 @@ export const useRecipeStore = defineStore('recipes', {
     async addComment(recipeId, comment) {
       this.loading = true
       try {
-        // const response = await api.post(`/recipes/${recipeId}/comments`, comment)
-        // 模拟响应
         const response = {
           id: Date.now(),
           ...comment,
@@ -197,8 +191,6 @@ export const useRecipeStore = defineStore('recipes', {
       this.loading = true
       this.searchResults = []
       try {
-        // const response = await api.get('/recipes/search', { params: { q: query } })
-        // 模拟搜索结果
         const response = this.recipes.filter(recipe =>
           recipe.title.toLowerCase().includes(query.toLowerCase()) ||
           recipe.description.toLowerCase().includes(query.toLowerCase())

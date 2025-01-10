@@ -3,11 +3,12 @@
     <h3 class="recipe-title">{{ recipe.title }}</h3>
     <div class="recipe-info">
       <span class="recipe-category">{{ recipe.category }}</span>
-      <span class="recipe-rating">{{ recipe.averageRating.toFixed(1) }}</span>
+      <span class="recipe-rating">{{ formatRating(recipe.averageRating) }}</span>
     </div>
     <p class="recipe-description">{{ recipe.description }}</p>
-    <div class="recipe-author">
-      <span>{{ recipe.author.username }}</span>
+    <div class="recipe-footer">
+      <span class="recipe-author">{{ recipe.author?.username }}</span>
+      <span class="recipe-date">{{ new Date(recipe.creationDate).toLocaleDateString() }}</span>
     </div>
   </div>
 </template>
@@ -41,6 +42,10 @@ defineProps({
     }),
   },
 })
+
+const formatRating = (rating) => {
+  return rating ? rating.toFixed(1) : '0.0'
+}
 </script>
 
 <style scoped>
@@ -91,10 +96,21 @@ defineProps({
   margin: 0 0 12px 0;
 }
 
+.recipe-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
 .recipe-author {
   color: #888;
   font-size: 14px;
-  padding-top: 12px;
-  border-top: 1px solid #eee;
+}
+
+.recipe-date {
+  color: #888;
+  font-size: 14px;
 }
 </style>

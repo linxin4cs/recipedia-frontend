@@ -21,9 +21,17 @@
 <script setup>
 
 import {useRouter} from "vue-router";
+import {onMounted} from "vue";
+import {useAuthStore} from "@/stores/auth.js";
+
+const authStore = useAuthStore()
 
 const router = useRouter()
 const currentRoute = router.currentRoute
+
+onMounted(async  () => {
+  await authStore.fetchUserProfile()
+})
 
 </script>
 

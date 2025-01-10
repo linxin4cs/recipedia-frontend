@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { setupRouteGuards } from './guards'
 import HomeView from '../views/HomeView.vue'
-import LoginView from '../views/LoginView.vue'
-import SignupView from '../views/SignupView.vue'
+import LoginView from '../views/auth/LoginView.vue'
+import SignupView from '../views/auth/SignupView.vue'
 import AccountView from '../views/AccountView.vue'
 import CreateRecipeView from '../views/CreateRecipeView.vue'
 import TrendyView from '../views/TrendyView.vue'
 import DiscussionView from '../views/DiscussionView.vue'
 import RecipeView from '../views/RecipeView.vue'
 import SearchView from '../views/SearchView.vue'
-import ChallengeView from '../views/ChallengeView.vue'
-import ChallengeDetailsView from '../views/ChallengeDetailsView.vue'
+import ChallengeView from '../views/challenge/ChallengesView.vue'
+import ChallengeDetailsView from '../views/challenge/ChallengeDetailsView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,7 +58,7 @@ const router = createRouter({
       component: DiscussionView
     },
     {
-      path: '/recipe/:id',
+      path: '/recipes/:id',
       name: 'recipe',
       component: RecipeView
     },
@@ -68,7 +68,7 @@ const router = createRouter({
       component: SearchView
     },
     {
-      path: '/challenge/:id',
+      path: '/challenges/:id',
       name: 'challenge-details',
       component: ChallengeDetailsView
     },
